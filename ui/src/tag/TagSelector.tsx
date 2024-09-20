@@ -114,11 +114,10 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
             setSelectedEntries(selectedEntries.slice(0, selectedEntries.length - 1));
             setCurrentValue(event.ctrlKey ? '' : label(last));
         }
-        if (event.key === 'ArrowUp') {
+        if (event.key === 'ArrowUp' || (event.key === 'Tab' && event.shiftKey && open)) {
             event.preventDefault();
             setHighlightedIndex(highlightedIndex === 0 ? suggestions.length - 1 : highlightedIndex - 1);
-        }
-        if (event.key === 'ArrowDown') {
+        } else if (event.key === 'ArrowDown' || (event.key === 'Tab' && open)) {
             event.preventDefault();
             setHighlightedIndex(highlightedIndex === suggestions.length - 1 ? 0 : highlightedIndex + 1);
         }
