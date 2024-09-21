@@ -67,14 +67,12 @@ release:
 	docker build -t traggo:build -f docker/Dockerfile.build docker
 	docker run \
 		--rm \
-		-v "$$HOME/.docker/config.json:/root/.docker/config.json" \
 		-e CGO_ENABLED=1 \
-		-e GITHUB_TOKEN="$$GITHUB_TOKEN" \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v $$PWD:/work \
 		-w /work \
 		traggo:build \
-		release --skip-validate --clean
+		release --snapshot --skip-validate --clean
 
 .PHONY: release-snapshot
 release-snapshot:
