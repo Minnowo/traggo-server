@@ -9,24 +9,23 @@ interface DateTimeSelectorProps {
     showDate: boolean;
     label: string;
     popoverOpen?: (open: boolean) => void;
-    style?: object;
 }
 
 export const DateTimeSelector: React.FC<DateTimeSelectorProps> = React.memo(
-    ({selectedDate, onSelectDate, showDate, label, popoverOpen = () => {}, style = null}) => {
+    ({selectedDate, onSelectDate, showDate, label, popoverOpen = () => {}}) => {
         const [open, setOpen] = React.useState(false);
         const localeData = moment.localeData();
         const time = localeData.longDateFormat('LT').replace('A', 'a');
         const ampm = time.indexOf('a') !== -1;
         const format = showDate ? localeData.longDateFormat('L') + ' ' + time : time;
-        const width = (showDate ? 185 : 105) + (ampm ? 20 : 0);
 
         return (
             <KeyboardDateTimePicker
+                className="time-picker"
                 variant="dialog"
                 InputProps={{disableUnderline: true}}
                 title={selectedDate.format()}
-                style={{minWidth: width, maxWidth: width, ...style}}
+                style={{width: (showDate ? 185 : 105) + (ampm ? 20 : 0)}}
                 PopoverProps={{
                     onEntered: () => {
                         popoverOpen(true);
