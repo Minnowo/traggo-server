@@ -4,7 +4,7 @@ import {TagSelector} from '../tag/TagSelector';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import {DateTimeSelector} from '../common/DateTimeSelector';
-import {Button, TextField, Typography, makeStyles} from '@material-ui/core';
+import {Button, TextField, Typography, makeStyles, Tooltip} from '@material-ui/core';
 import {inUserTz} from './timeutils';
 import {useMutation} from '@apollo/react-hooks';
 import {StopTimer, StopTimerVariables} from '../gql/__generated__/StopTimer';
@@ -22,6 +22,8 @@ import {Trackers} from '../gql/__generated__/Trackers';
 import {addTimeSpanToCache, removeFromTrackersCache} from '../gql/utils';
 import {StartTimer, StartTimerVariables} from '../gql/__generated__/StartTimer';
 import {RelativeTime, RelativeToNow} from '../common/RelativeTime';
+import ShowNotesIcon from '@material-ui/icons/KeyboardArrowDown';
+import HideNotesIcon from '@material-ui/icons/KeyboardArrowUp';
 
 interface Range {
     from: moment.Moment;
@@ -78,6 +80,11 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             top: '0',
             right: '0',
+        },
+    },
+    desktopShowNotesButton: {
+        '@media (max-width: 750px)': {
+            display: 'none',
         },
     },
 }));
@@ -189,6 +196,11 @@ export const TimeSpan: React.FC<TimeSpanProps> = React.memo(
                     width: '100%',
                 }}>
                 <div className={styles.innerTimespan}>
+                    <Tooltip title="Toggle notes">
+                        <IconButton className={styles.desktopShowNotesButton} onClick={() => toggleShowingNotes(!showNotes)}>
+                            {showNotes ? <HideNotesIcon /> : <ShowNotesIcon />}
+                        </IconButton>
+                    </Tooltip>
                     <div className={styles.tagInput}>
                         <TagSelector
                             dialogOpen={dateSelectorOpen}
@@ -335,7 +347,7 @@ export const TimeSpan: React.FC<TimeSpanProps> = React.memo(
                                 setOpenMenu(null);
                                 toggleShowingNotes(!showNotes);
                             }}>
-                            Show Notes
+                            {showNotes ? <>Hide Notes</> : <>Show Notes</>}
                         </MenuItem>
                         <MenuItem
                             onClick={() => {
